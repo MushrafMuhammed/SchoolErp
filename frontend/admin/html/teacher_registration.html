@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>admin_home</title>
+
+  <!-- <bootstrap> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="row container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light " style="padding-left: 20px;">
+      <a class="navbar-brand" href="#">Teacher Registration</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="admin_home.html">Home <span class="sr-only"></span></a>
+          </li>
+
+          <li class="nav-item active">
+            <a class="nav-link" href="teacher_view.html">Teacher View</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="student_view.html">Student View</a>
+          </li>
+
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <section class="h-100 bg-dark">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col">
+          <div class="card card-registration my-4">
+            <div class="row g-0">
+              <div class="col-xl-6 d-none d-xl-block">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                  alt="Sample photo" class="img-fluid"
+                  style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+              </div>
+              <div class="col-xl-6">
+                <div class="card-body p-md-5 text-black">
+                  <h3 class="mb-5 text-uppercase">Teacher registration </h3>
+
+                  <div class="row">
+                    <div class="col-md-12 mb-4">
+                      <div class="form-outline">
+                        <input type="text" id="name" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example1n">Full name</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="address" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example8">Address</label>
+                  </div>
+
+                  <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+
+                    <h6 class="mb-0 me-4">Gender: </h6>
+
+                    <div class="form-check form-check-inline mb-0 me-4">
+                      <input class="form-check-input" type="radio" id="gender" value="male"  />
+                      <label class="form-check-label" for="femaleGender">Male</label>
+                    </div>
+
+                    <!-- <div class="form-check form-check-inline mb-0 me-4">
+                      <input class="form-check-input" type="radio" id="gender"  />
+                      <label class="form-check-label" for="maleGender">Male</label>
+                    </div> -->
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="birth" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example9">DOB</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="pincode" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example90">Pincode</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="qualification" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example99">Qualification</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="phone" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example99">Phone No</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="email" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example97">Email ID</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="password" id="password" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example97">password</label>
+                  </div>
+
+                  <div class="d-flex justify-content-end pt-3">
+                    <span id="error"></span>
+                    <button type="submit" id="submit_btn" class="btn btn-warning btn-lg ms-2">Submit</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    $(document).ready(function () {
+      $("#submit_btn").click(function () {
+        var teacher_data = {
+          "name": $("#name").val(),
+          "address": $("#address").val(),
+          "gender": $("#gender").val(),
+          "dob": $("#birth").val(),
+          "pincode": $("#pincode").val(),
+          "qualification": $("#qualification").val(),
+          "phone": $("#phone").val(),
+          "email": $("#email").val(),
+          "password": $("#password").val()
+        }
+        console.log(teacher_data)
+
+        $.ajax({
+          url: "http://127.0.0.1:8000/teacher/add-teacher",
+          data: teacher_data,
+          type: "POST",
+          success: function (response) {
+            $('#error').html(response.errorMessage)
+          }
+        })
+      })
+    })
+  </script>
+</body>
+
+</html>
