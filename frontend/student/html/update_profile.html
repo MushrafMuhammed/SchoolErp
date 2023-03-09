@@ -13,6 +13,11 @@
 
     <!-- <css> -->
     <link rel="stylesheet" href="../css/addMarkStyle.css    ">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -40,10 +45,14 @@
                         <li class="nav-item">
                             <a class="nav-link " href="exams.html">Exams</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link " href="update_profile.html">Edit profile</a>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link " href="change_password.html">Change password</a>
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -68,8 +77,7 @@
                                         <div class="mb-4 pb-2">
                                             <div class="form-outline">
                                                 <label class="form-label" for="form3Examplev4">Name</label>
-                                                <input type="text" id="form3Examplev4"
-                                                    class="form-control form-control-lg" />
+                                                <input type="text" class="form-control form-control-lg" id="std_name" readonly/>
                                             </div>
                                         </div>
 
@@ -78,7 +86,7 @@
 
                                                 <div class="form-outline">
                                                     <label class="form-label" for="form3Examplev2">Address</label>
-                                                    <input type="text" id="form3Examplev2"
+                                                    <input type="text" id="std_address"
                                                         class="form-control form-control-lg" />
                                                 </div>
 
@@ -88,12 +96,20 @@
                                         <div class="mb-4">
                                             <div class="form-outline form-white">
                                                 <label class="form-label" for="form3Examplea9">Course</label>
-                                                <input type="text" id="form3Examplea9"
+                                                <input type="text" id="std_course"
                                                     class="form-control form-control-lg" />
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-primary" style="width: 100%;">Save</button>
 
+                                        <div class="mb-4">
+                                            <div class="form-outline form-white">
+                                                <label class="form-label" for="form3Examplea9">Password</label>
+                                                <input type="text" id="std_password"
+                                                    class="form-control form-control-lg" />
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary" style="width: 100%;">Save</button>
 
                                     </div>
                                 </div>
@@ -105,6 +121,30 @@
         </div>
         <!-- </section> -->
     </div>
+
+    <script>
+        $(document).ready(function () {
+            student = parseInt(localStorage.getItem("token"))
+
+            $.ajax({
+                url: "http://127.0.0.1:8000/student/loadStudent",
+                data: { "id": student },
+                type: "POST",
+
+                success: function (response) {
+                    new_student = response.student
+                    // console.log(new_student)
+                    // $("#std_emai").val(new_student[0].email)
+                    $("#std_name").val(new_student[0].name)
+                    $("#std_address").val(new_student[0].address)
+                    $("#std_dob").val(new_student[0].dob)
+                    $("#std_course").val(new_student[0].course)
+                    $("#std_password").val(new_student[0].password)
+
+                }
+            })
+        })
+    </script>
 
 </body>
 

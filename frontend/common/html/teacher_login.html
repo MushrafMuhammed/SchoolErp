@@ -81,21 +81,12 @@
           success: function (response) {
             console.log(response.statusCode)
             if (response.statusCode == true) {
-              window.location.href = "http://127.0.0.1:5501/Teacher/html/view_student.html"
+              window.location.href = "http://127.0.0.1:5501/Teacher/html/teacher_home.html"
             }
             else {
               $("#errorMessage").html("Invalid username or password !")
             }
           }
-          // success: function (response) {
-          //   console.log(response.statusCode)
-          //   if (response.statusCode == true) {
-          //     window.location.href = "http://127.0.0.1:5501/Teacher/html/view_student.html"
-          //   }
-          //   else {
-          //     $("#errorMessage").html("Invalid username or password !")
-          //   }
-          // }
         })
       })
     })
