@@ -16,7 +16,9 @@ class Teacher(models.Model) :
     password = models.CharField(max_length=20)
 
 class Attendance(models.Model):
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    date = models.CharField(max_length=15)
     mark = models.CharField(max_length=15)
 
 

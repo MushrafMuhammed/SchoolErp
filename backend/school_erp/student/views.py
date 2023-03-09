@@ -66,8 +66,18 @@ def changePassword_fun(request):
         return JsonResponse({"msg": "invalid"})
 
 @api_view(["GET"])
-def viewStudent_fun(request):
+def viewStudent_fun(request): #@admin side
     students = Student.objects.all()
+    serializer_data = StudentSerializer(students,many = True)
+    # print(serializer_data)
+    return JsonResponse({"studentList":serializer_data.data})
+
+@api_view(["POST"])
+def viewMyStudent_fun(request): #@Teacher side
+    teaId = request.data
+    students = Student.objects.filter(
+        teacher_id = teaId["teacher_id"]
+    )
     serializer_data = StudentSerializer(students,many = True)
     # print(serializer_data)
     return JsonResponse({"studentList":serializer_data.data})

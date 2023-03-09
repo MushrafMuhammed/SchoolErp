@@ -15,3 +15,5 @@ class Student(models.Model) :
     phone = models.CharField(max_length=10)
     email = models.CharField(max_length=50, default="")
     password = models.CharField(max_length=20)
+
+    

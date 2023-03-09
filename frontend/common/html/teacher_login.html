@@ -81,6 +81,7 @@
           success: function (response) {
             console.log(response.statusCode)
             if (response.statusCode == true) {
+              localStorage.setItem("token",response.teacher_id)
               window.location.href = "http://127.0.0.1:5501/Teacher/html/teacher_home.html"
             }
             else {

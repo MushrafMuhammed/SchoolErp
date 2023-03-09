@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 
 from .models import Teacher
 
-from teacher.serializer import TeacherSerializer
+from teacher.serializer import AttendanceSerializer, TeacherSerializer
 
 
 # Create your views here.
@@ -21,6 +21,8 @@ def teacherLog_fun(request):
             password=password
         )
         status = True
+        teacherId = newTeacher.id
+        return JsonResponse({"statusCode": status, "teacher_id": teacherId})
 
     except:
         status = False
@@ -29,7 +31,6 @@ def teacherLog_fun(request):
 
 @api_view(["POST"])
 def addTeacher_fun(request):
-
     params = request.data
     serialized_data = TeacherSerializer(data=params)
     print(serialized_data)
@@ -45,4 +46,15 @@ def viewTeacher_fun(request):
     teachers = Teacher.objects.all()
     serialized_data = TeacherSerializer(teachers, many=True)
     print(serialized_data.data)
-    return JsonResponse({"teachersList":serialized_data.data})
+    return JsonResponse({"teachersList": serialized_data.data})
+
+
+@api_view(["POST"])
+def addAttendance_fun(request):
+    params = request.data
+    serialized_data = AttendanceSerializer(data=params)
+    if serialized_data.is_valid():
+        serialized_data.save()
+        return JsonResponse({'successMessage': 'Data inserted successfully'})
+    else:
+        return JsonResponse({'errorMessage': 'Data validation failed !'})

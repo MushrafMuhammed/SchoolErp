@@ -11,6 +11,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
 
 </head>
 
@@ -34,7 +37,8 @@
                     <!-- Left links -->
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="add_student.html">Student registration</a>
+                            <a class="nav-link active" aria-current="page" href="add_student.html">Student
+                                registration</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="view_student.html">View students</a>
@@ -61,60 +65,108 @@
 
     </div>
 
-    <div class="row container-fluid" style="margin-top: 2%;">
+    <div class="row container-fluid" style="margin: 1%;">
+
+        <!-- <div class="form-outline mb-4" style="width: 30%;">
+            <label class="form-label" for="form3Example9"><b>Date:</b></label>
+            <div class="row">
+                <div class="col">
+                    <input type="date" id="calDate" class="form-control form-control-lg" />
+                </div>
+                <div class="col">
+                    <button id="proceed_btn" type="submit" class="btn btn-success">Proceed</button>
+                </div>
+            </div>
+
+        </div> -->
+
         <h3>Student Attendance</h3>
+
         <table class="table align-middle mb-0 bg-white">
             <thead class="bg-primary text-white">
-                <tr style="text-align: center;">
-                    <th>Slno</th>
+                <tr class="text-center bg-dark">
                     <th>Name</th>
                     <th>Course</th>
+                    <th>Email</th>
                     <th>Mark</th>
+                    <th>Date</th>
+                    <th></th>
                 <tr>
             </thead>
             <tbody>
-                <tr style="text-align: center;">
-                    <td>
-                        *****
-                    </td>
-                    <td>
-                        ******
-                    </td>
-                    <td>
-                        ******
-                    </td>
-                    <td>
-                        <!-- <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"> -->
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                                value="option1">
-                            <label class="form-check-label" for="inlineRadio1">Present</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                                value="option2">
-                            <label class="form-check-label" for="inlineRadio2">Absent</label>
-                        </div>
-                    </td>
-                </tr>
-
 
             </tbody>
         </table>
     </div>
 
+    <script>
+        $(document).ready(function () {
+            // var currentDate
+            // $("#proceed_btn").click(function () {
+            //     currentDate = $("#calDate").val()
+            //     console.log(currentDate)
+            // })
+
+            teacherId = localStorage.getItem("token")
+
+            $.ajax({
+                url: "http://127.0.0.1:8000/student/my-students",
+                data: { "teacher_id": teacherId },
+                type: "POST",
 
 
+                success: function (response) {
+                    console.log(response.studentList)
+                    // $("cunDate").val(currentDate)
+                    for (var i = 0; i < response.studentList.length; i++) {
+                        var student = response.studentList[i];
+                        // console.log(student)
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
-        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
-        crossorigin="anonymous"></script>
+                        tr = $("<tr>").css("text-align", "center");
+                        tr.append("<td id='teacherId' class='d-none'>" + teacherId + "</td>")
+                        tr.append("<td id='studentId' class='d-none'>" + student.id + "</td>")
+                        tr.append("<td>" + student.name + "</td>")
+                        tr.append("<td>" + student.course + "</td>")
+                        tr.append("<td id='stdEmail'>" + student.email + "</td>")
+                        tr.append("<td>" + "<select class='form-select' aria-label='Default select example' id='stdMark'>" +
+                            "<option selected>Open this select menu</option>" +
+                            "<option value='present'>Present</option>" +
+                            "<option value='absent'>Absent</option>" +
+                            "</select>" + "</td>")
+                        tr.append("<td class=''>" + "<span >" + "<input type='date' id='calDate' class='form-control form-control-lg' />" + "</span>" + "</td>")
+                        tr.append("<td>" + "<button id='proceed_btn' type='submit' class='btn btn-primary'>Proceed</button>" + "</td>")
+                        $("tbody").append(tr);
+                    }
+                }
+            })
+
+            $("#proceed_btn").click(function () {
+                var attendanceData = {
+                    "teacher": $("#teacherId").val(),
+                    "student": $("#studentId").val(),
+                    "date": $("#stdEmail").val(),
+                    "mark": $("#stdMark").val(),
+                }
+                console.log(attendanceData)
+
+                $.ajax({
+                    url: "http://127.0.0.1:8000/teacher/add-attendance",
+                    data: { "teacher_id": teacherId, "student_id": studentId, "std_email": stdEmail, "std_mark": stdMark },
+                    type: "POST",
+
+                    success: function (response) {
+                        if (response.successMessage) {
+                            $("#successMessage").html(response.successMessage);
+                        }
+                        else {
+                            // console.log('kjbjk')
+                            $("#errorMessage").html(response.errorMessage);
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 
 </html>
