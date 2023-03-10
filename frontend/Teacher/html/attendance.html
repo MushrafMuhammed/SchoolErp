@@ -36,6 +36,7 @@
                 <div class="collapse navbar-collapse" id="navbarRightAlignExample">
                     <!-- Left links -->
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="add_student.html">Student
                                 registration</a>
@@ -47,17 +48,15 @@
                             <a class="nav-link " href="attendance.html">Attendance</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link " href="view_attendance.html">Attendance List</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link " href="change_password.html">change password</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="profile.html">Profile</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="add_exam.html">Add exam</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="delete_exam.html">Delete exam</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -101,12 +100,6 @@
 
     <script>
         $(document).ready(function () {
-            // var currentDate
-            // $("#proceed_btn").click(function () {
-            //     currentDate = $("#calDate").val()
-            //     console.log(currentDate)
-            // })
-
             teacherId = localStorage.getItem("token")
 
             $.ajax({
@@ -115,57 +108,94 @@
                 type: "POST",
 
 
+
                 success: function (response) {
-                    console.log(response.studentList)
-                    // $("cunDate").val(currentDate)
+                    // console.log(response.studentList)
+                    // $("cunDate").val(currentDate) for top bar date 
+                    var selectBox
+                    var selectedValue
                     for (var i = 0; i < response.studentList.length; i++) {
                         var student = response.studentList[i];
                         // console.log(student)
 
                         tr = $("<tr>").css("text-align", "center");
-                        tr.append("<td id='teacherId' class='d-none'>" + teacherId + "</td>")
-                        tr.append("<td id='studentId' class='d-none'>" + student.id + "</td>")
+                        tr.append("<td class='d-none'>" + teacherId + "</td>")
+                        tr.append("<td class='d-none'>" + student.id + "</td>")
                         tr.append("<td>" + student.name + "</td>")
                         tr.append("<td>" + student.course + "</td>")
-                        tr.append("<td id='stdEmail'>" + student.email + "</td>")
+                        tr.append("<td>" + student.email + "</td>")
                         tr.append("<td>" + "<select class='form-select' aria-label='Default select example' id='stdMark'>" +
-                            "<option selected>Open this select menu</option>" +
+                            "<option Vselected>Open this select menu</option>" +
                             "<option value='present'>Present</option>" +
                             "<option value='absent'>Absent</option>" +
                             "</select>" + "</td>")
                         tr.append("<td class=''>" + "<span >" + "<input type='date' id='calDate' class='form-control form-control-lg' />" + "</span>" + "</td>")
                         tr.append("<td>" + "<button id='proceed_btn' type='submit' class='btn btn-primary'>Proceed</button>" + "</td>")
                         $("tbody").append(tr);
+
                     }
                 }
             })
 
-            $("#proceed_btn").click(function () {
-                var attendanceData = {
-                    "teacher": $("#teacherId").val(),
-                    "student": $("#studentId").val(),
-                    "date": $("#stdEmail").val(),
-                    "mark": $("#stdMark").val(),
-                }
-                console.log(attendanceData)
+            // $(document).ready(function () {
+            //     // Bind the onclick event listener to the #proceed_btn button
+            //     $("tbody").on("click", "#proceed_btn", markAttendance);
+            // });
 
+            function markAttendance() {
+                // Get the associated student ID, teacher ID, attendance status, and date
+                var studentId = $(this).closest("tr").find("td:eq(1)").text();
+                var teacherId = $(this).closest("tr").find("td:eq(0)").text();
+                var attendanceStatus = $(this).closest("tr").find("#stdMark").val();
+                var attendanceDate = $(this).closest("tr").find("#calDate").val();
+
+                // Check if the attendance has already been marked for the selected student and date combination
                 $.ajax({
-                    url: "http://127.0.0.1:8000/teacher/add-attendance",
-                    data: { "teacher_id": teacherId, "student_id": studentId, "std_email": stdEmail, "std_mark": stdMark },
+                    url: "http://127.0.0.1:8000/teacher/check-attendance",
+                    data: {
+                        "student": studentId,
+                        "date": attendanceDate
+                    },
                     type: "POST",
-
                     success: function (response) {
-                        if (response.successMessage) {
-                            $("#successMessage").html(response.successMessage);
+                        if (response.attendanceStatus) {
+                            // Attendance has already been marked for the selected student and date combination
+                            alert("Attendance has already been marked for this student and date!");
+                        } else {
+                            // Attendance has not been marked yet
+                            // Make an AJAX POST request to the server
+                            $.ajax({
+                                url: "http://127.0.0.1:8000/teacher/add-attendance",
+                                data: {
+                                    "student": studentId,
+                                    "teacher": teacherId,
+                                    "mark": attendanceStatus,
+                                    "date": attendanceDate
+                                },
+                                type: "POST",
+                                success: function (response) {
+                                    alert(response.successMessage)
+                                },
+                                error: function (response) {
+                                    alert(response.errorMessage)
+                                }
+                            });
                         }
-                        else {
-                            // console.log('kjbjk')
-                            $("#errorMessage").html(response.errorMessage);
-                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle the error from the server accordingly
                     }
-                })
-            })
+                });
+            }
+
+
+
+
+
         })
+
+
+
     </script>
 </body>
 

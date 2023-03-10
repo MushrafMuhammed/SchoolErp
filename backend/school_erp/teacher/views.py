@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 
 from .models import Teacher
 
-from teacher.serializer import AttendanceSerializer, TeacherSerializer
+from teacher.serializer import AttendanceSerializer, CheckAttendanceSerializer, TeacherSerializer
 
 
 # Create your views here.
@@ -55,6 +55,42 @@ def addAttendance_fun(request):
     serialized_data = AttendanceSerializer(data=params)
     if serialized_data.is_valid():
         serialized_data.save()
-        return JsonResponse({'successMessage': 'Data inserted successfully'})
+        return JsonResponse({'successMessage': 'Attendance Marked successfully'})
     else:
         return JsonResponse({'errorMessage': 'Data validation failed !'})
+
+@api_view(["POST"])
+def checkAttendance_fun(request):
+    params = request.data
+    serialized_data = CheckAttendanceSerializer(data=params)
+    if serialized_data.is_valid():
+        
+        return JsonResponse({'successMessage': 'ready to mark '})
+    else:
+        return JsonResponse({'errorMessage': 'Already Attendance Marked'})
+
+@api_view(["POST"])
+def teacherProfile_fun(request):
+    new_teacher = Teacher.objects.filter(
+        id=request.data['id']
+    )
+    serialized_data = TeacherSerializer(new_teacher, many=True)
+    # print(serialized_data.data)
+    return JsonResponse({"teacher": serialized_data.data})
+
+@api_view(["PUT"])
+def changePassword_fun(request):
+    teacherData = request.data
+    # print(teacherData)
+    try:
+        newTeacher = Teacher.objects.get(
+            id=teacherData["teacherId"],
+            password=teacherData["oldPassword"]
+        )
+        # print(teacher)
+        newTeacher.password = teacherData["newPassword"]
+        print(newTeacher.password)
+        newTeacher.save()
+        return JsonResponse({"msg": "valid"})
+    except:
+        return JsonResponse({"msg": "invalid"})

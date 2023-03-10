@@ -12,7 +12,12 @@
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
     <!-- <css> -->
-    <link rel="stylesheet" href="../css/addMarkStyle.css    ">
+    <!-- <link rel="stylesheet" href="../css/addMarkStyle.css    "> -->
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -35,7 +40,8 @@
                     <!-- Left links -->
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="add_student.html">Student registration</a>
+                            <a class="nav-link active" aria-current="page" href="add_student.html">Student
+                                registration</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="view_student.html">View students</a>
@@ -44,16 +50,13 @@
                             <a class="nav-link " href="attendance.html">Attendance</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link " href="view_attendance.html">Attendance List</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link " href="change_password.html">change password</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="profile.html">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="add_exam.html">Add exam</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="delete_exam.html">Delete exam</a>
                         </li>
                     </ul>
                 </div>
@@ -75,39 +78,25 @@
                                             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
                                                 alt="Avatar" class="img-fluid "
                                                 style="width: 80px; align-items: center;" />
-                                            <h3 class="fw-normal mb-5">**********</h3>
+                                            <h3 class="fw-normal mb-5" id="teacher_emai"></h3>
                                         </div>
 
-                                        <div class="mb-4 pb-2">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="form3Examplev4">Address</label>
-                                                <input type="text" id="form3Examplev4"
-                                                    class="form-control form-control-lg" />
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12 mb-4 pb-2">
-
-                                                <div class="form-outline">
-                                                    <label class="form-label" for="form3Examplev2">Class charge</label>
-                                                    <input type="text" id="form3Examplev2"
-                                                        class="form-control form-control-lg" />
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <div class="form-outline form-white">
-                                                <label class="form-label" for="form3Examplea9">Qualification</label>
-                                                <input type="text" id="form3Examplea9"
-                                                    class="form-control form-control-lg" />
-                                            </div>
-                                        </div>
-                                        <!-- <button type="button" class="btn btn-primary"
-                                            style="width: 100%;">Submit</button> -->
-
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="col">Name:</th>
+                                                    <th scope="col" id="teacher_name"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Dob:</th>
+                                                    <th scope="col" id="teacher_dob"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col">Qualification:</th>
+                                                    <th scope="col" id="teacher_quelifi"></th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
                                     </div>
                                 </div>
@@ -119,6 +108,29 @@
         </div>
         <!-- </section> -->
     </div>
+
+
+    <script>
+        $(document).ready(function () {
+            teacher = parseInt(localStorage.getItem("token"))
+            //    $("#teacher_name").html(teacher)
+
+
+            $.ajax({
+                url: "http://127.0.0.1:8000/teacher/myProfile",
+                data: { "id": teacher },
+                type: "POST",
+                success: function (response) {
+                    new_teacher = response.teacher
+                    // console.log(new_teacher)
+                    // $("#teacher_emai").html(new_teacher[0].email)
+                    $("#teacher_name").html(new_teacher[0].name)
+                    $("#teacher_dob").html(new_teacher[0].dob)
+                    $("#teacher_quelifi").html(new_teacher[0].qualification)
+                }
+            })
+        })
+    </script>
 
 </body>
 
